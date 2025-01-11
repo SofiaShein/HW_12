@@ -21,7 +21,7 @@ import java.util.List;
 @PropertySource("classpath:telegram.properties")
 public class ChatBot extends TelegramLongPollingBot {
 
-    private static final Logger LOGGER = LogManager.getLogger(ChatBot.class); //log4j
+    private static final Logger LOGGER = LogManager.getLogger(ChatBot.class);
 
     private static final String BROADCAST = "broadcast ";
     private static final String LIST_USERS = "users";
@@ -64,8 +64,6 @@ public class ChatBot extends TelegramLongPollingBot {
         BotContext context;
         BotState state;
 
-        // H -> Ph -> Em -> Th
-        // 1 -> 2! -> 3! -> 4
 
         if (user == null) {
             state = BotState.getInitialState();
@@ -86,7 +84,6 @@ public class ChatBot extends TelegramLongPollingBot {
 
         state.handleInput(context);
 
-        // 1 -> 2 -> 3!
         do {
             state = state.nextState();
             state.enter(context);
@@ -150,7 +147,7 @@ public class ChatBot extends TelegramLongPollingBot {
                         .append(' ')
                         .append(user.getPhone())
                         .append(' ')
-                        .append(user.getAddress()) // Вывод адреса
+                        .append(user.getAddress())
                         .append("\r\n")
         );
 

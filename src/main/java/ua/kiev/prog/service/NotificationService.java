@@ -38,10 +38,6 @@ public class NotificationService {
         if (users == null || users.isEmpty()) {
             return;
         }
-//    public void sendNewApplications() {
-//        List<User> users = userService.findNewUsers();
-//        if (users.size() == 0)
-//            return;
 
         StringBuilder sb = new StringBuilder();
 
@@ -57,7 +53,6 @@ public class NotificationService {
         sendEmail(sb.toString());
     }
 
-    // c -> smtp ----- smtp -> pop3/imap <--- c
 
     private void sendEmail(String text) {
         SimpleMailMessage message = new SimpleMailMessage();
