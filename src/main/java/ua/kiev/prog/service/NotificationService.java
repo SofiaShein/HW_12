@@ -1,4 +1,5 @@
-package ua.kiev.prog.mail;
+package ua.kiev.prog.service;
+
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -7,7 +8,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ua.kiev.prog.model.User;
-import ua.kiev.prog.service.UserService;
 
 import java.util.List;
 
@@ -32,11 +32,16 @@ public class NotificationService {
         this.emailSender = emailSender;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 21600000)
     public void sendNewApplications() {
         List<User> users = userService.findNewUsers();
-        if (users.size() == 0)
+        if (users == null || users.isEmpty()) {
             return;
+        }
+//    public void sendNewApplications() {
+//        List<User> users = userService.findNewUsers();
+//        if (users.size() == 0)
+//            return;
 
         StringBuilder sb = new StringBuilder();
 
@@ -44,13 +49,15 @@ public class NotificationService {
             sb.append("Phone: ")
                     .append(user.getPhone())
                     .append("\r\n")
-                    .append("Email: ")
-                    .append(user.getEmail())
+                    .append("Address: ")
+                    .append(user.getAddress())
                     .append("\r\n\r\n")
         );
 
         sendEmail(sb.toString());
     }
+
+    // c -> smtp ----- smtp -> pop3/imap <--- c
 
     private void sendEmail(String text) {
         SimpleMailMessage message = new SimpleMailMessage();

@@ -1,11 +1,11 @@
 package ua.kiev.prog.service;
 
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.kiev.prog.model.User;
 import ua.kiev.prog.repo.UserRepository;
-
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {

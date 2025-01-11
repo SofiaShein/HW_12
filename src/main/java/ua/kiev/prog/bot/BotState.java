@@ -1,5 +1,4 @@
 package ua.kiev.prog.bot;
-
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -30,34 +29,24 @@ public enum BotState {
 
         @Override
         public BotState nextState() {
-            return EnterEmail;
+            return EnterAddress;
         }
     },
 
-    EnterEmail {
-        private BotState next;
-
+    EnterAddress {
         @Override
         public void enter(BotContext context) {
-            sendMessage(context, "Enter your e-mail please:");
+            sendMessage(context, "Enter your address please:");
         }
 
         @Override
         public void handleInput(BotContext context) {
-            String email = context.getInput();
-
-            if (Utils.isValidEmailAddress(email)) {
-                context.getUser().setEmail(context.getInput());
-                next = Approved;
-            } else {
-                sendMessage(context, "Wrong e-mail address!");
-                next = EnterEmail;
-            }
+            context.getUser().setAddress(context.getInput());
         }
 
         @Override
         public BotState nextState() {
-            return next;
+            return Approved;
         }
     },
 
@@ -72,6 +61,84 @@ public enum BotState {
             return Start;
         }
     };
+
+    // ... остальной код BotState остаётся неизменным ...
+
+
+//
+
+//
+//public enum BotState {
+//
+//    Start {
+//        @Override
+//        public void enter(BotContext context) {
+//            sendMessage(context, "Hello!");
+//        }
+//
+//        @Override
+//        public BotState nextState() {
+//            return EnterPhone;
+//        }
+//    },
+//
+//    EnterPhone {
+//        @Override
+//        public void enter(BotContext context) {
+//            sendMessage(context, "Enter your phone number please:");
+//        }
+//
+//        @Override
+//        public void handleInput(BotContext context) {
+//            context.getUser().setPhone(context.getInput());
+//        }
+//
+//        @Override
+//        public BotState nextState() {
+//            return EnterEmail;
+//        }
+//    },
+//
+//    EnterEmail {
+//        private BotState next;
+//
+//        @Override
+//        public void enter(BotContext context) {
+//            sendMessage(context, "Enter your e-mail please:");
+//        }
+//
+//        @Override
+//        public void handleInput(BotContext context) {
+//            String email = context.getInput();
+//
+//            if (Utils.isValidEmailAddress(email)) {
+//                context.getUser().setEmail(context.getInput());
+//                next = Approved;
+//            } else {
+//                sendMessage(context, "Wrong e-mail address!");
+//                next = EnterEmail;
+//            }
+//        }
+//
+//        @Override
+//        public BotState nextState() {
+//            return next;
+//        }
+//    },
+//
+//    Approved(false) {
+//        @Override
+//        public void enter(BotContext context) {
+//            sendMessage(context, "Thank you for application!");
+//        }
+//
+//        @Override
+//        public BotState nextState() {
+//            return Start;
+//        }
+//    };
+//
+//    // --------------- //
 
     private static BotState[] states;
     private final boolean inputNeeded;
@@ -97,9 +164,9 @@ public enum BotState {
     }
 
     protected void sendMessage(BotContext context, String text) {
-        SendMessage message = new SendMessage()
-                .setChatId(context.getUser().getChatId())
-                .setText(text);
+        SendMessage message = new SendMessage();
+        message.setChatId(Long.toString(context.getUser().getChatId()));
+        message.setText(text);
         try {
             context.getBot().execute(message);
         } catch (TelegramApiException e) {
